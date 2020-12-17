@@ -6,6 +6,7 @@
 {
     "name": "dbfilter_from_header",
     "summary": "Filter databases with HTTP headers",
+<<<<<<< HEAD
     "version": "12.0.1.0.0",
     "website": "https://github.com/OCA/server-tools",
     "author": "Therp BV, "
@@ -18,4 +19,14 @@
     ],
     "auto_install": False,
     'installable': True,
+=======
+    "version": "13.0.1.0.0",
+    "website": "https://github.com/OCA/server-tools",
+    "author": "Therp BV, Odoo Community Association (OCA)",
+    "license": "AGPL-3",
+    "category": "Tools",
+    "depends": ["web"],
+    "auto_install": False,
+    "installable": True,
+>>>>>>> upstream/13.0
 }

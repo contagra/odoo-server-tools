@@ -7,3 +7,7 @@
 * Fabio Vilchez <fabio.vilchez@clearcorp.co.cr>
 * Jos De Graeve <Jos.DeGraeve@apertoso.be>
 * Lai Tim Siu (Quaritle Limited) <info@quartile.co>
+<<<<<<< HEAD
+=======
+* Tharathip Chaweewongphan <tharathipc@ecosoft.co.th>
+>>>>>>> upstream/13.0
