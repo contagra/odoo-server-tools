@@ -4,7 +4,6 @@
 import base64
 import logging
 import os
-import time
 from datetime import date, datetime as dt
 from io import BytesIO
 
@@ -31,7 +30,6 @@ class XLSXExport(models.AbstractModel):
     def get_eval_context(self, model, record, value):
         eval_context = {
             "float_compare": float_compare,
-            "time": time,
             "datetime": dt,
             "date": date,
             "value": value,
