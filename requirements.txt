@@ -1,5 +1,8 @@
 # generated from manifests external_dependencies
 openpyxl
+dataclasses
+odoorpc
+openupgradelib
 raven
 xlrd
 xlwt
