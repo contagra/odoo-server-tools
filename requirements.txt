@@ -6,3 +6,4 @@ openupgradelib
 raven
 xlrd
 xlwt
+unidecode
