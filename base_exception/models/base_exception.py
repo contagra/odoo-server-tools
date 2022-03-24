@@ -25,34 +25,46 @@ class ExceptionRule(models.Model):
     model = fields.Selection(selection=[], string="Apply on", required=True)
 
     exception_type = fields.Selection(
-        selection=[("by_domain", "By domain"), ("by_py_code", "By python code")],
+        selection=[
+            ("by_domain", "By domain"),
+            ("by_py_code", "By python code"),
+            ("by_method", "By method"),
+        ],
         string="Exception Type",
         required=True,
         default="by_py_code",
         help="By python code: allow to define any arbitrary check\n"
         "By domain: limited to a selection by an odoo domain:\n"
-        "           performance can be better when exceptions "
-        "           are evaluated with several records",
+        "           performance can be better when exceptions"
+        "           are evaluated with several records\n"
+        "By method: allow to select an existing check method",
     )
     domain = fields.Char("Domain")
-
+    method = fields.Selection(selection=[], string="Method", readonly=True)
     active = fields.Boolean("Active", default=True)
     code = fields.Text(
         "Python Code",
         help="Python code executed to check if the exception apply or "
         "not. Use failed = True to block the exception",
     )
+    is_blocking = fields.Boolean(
+        string="Is blocking",
+        help="When checked the exception can not be ignored",
+    )
 
-    @api.constrains("exception_type", "domain", "code")
+    @api.constrains("exception_type", "domain", "code", "model")
     def check_exception_type_consistency(self):
         for rule in self:
-            if (rule.exception_type == "by_py_code" and not rule.code) or (
-                rule.exception_type == "by_domain" and not rule.domain
+            if (
+                (rule.exception_type == "by_py_code" and not rule.code)
+                or (rule.exception_type == "by_domain" and not rule.domain)
+                or (rule.exception_type == "by_method" and not rule.method)
             ):
                 raise ValidationError(
                     _(
-                        "There is a problem of configuration, python code or "
-                        "domain is missing to match the exception type."
+                        "There is a problem of configuration, python code, "
+                        "domain or method is missing to match the exception "
+                        "type."
                     )
                 )
 
@@ -83,7 +95,7 @@ class BaseExceptionMethod(models.AbstractModel):
         By default, only the rules with the correct model
         will be used.
         """
-        return [("model", "=", self._name)]
+        return [("model", "=", self._name), ("active", "=", True)]
 
     def detect_exceptions(self):
         """List all exception_ids applied on self
@@ -156,6 +168,8 @@ class BaseExceptionMethod(models.AbstractModel):
             return self._detect_exceptions_by_py_code(rule)
         elif rule.exception_type == "by_domain":
             return self._detect_exceptions_by_domain(rule)
+        elif rule.exception_type == "by_method":
+            return self._detect_exceptions_by_method(rule)
 
     def _get_base_domain(self):
         return [("ignore_exception", "=", False), ("id", "in", self.ids)]
@@ -181,6 +195,14 @@ class BaseExceptionMethod(models.AbstractModel):
         domain = expression.AND([base_domain, rule_domain])
         return self.search(domain)
 
+    def _detect_exceptions_by_method(self, rule):
+        """
+        Find exceptions found on self.
+        """
+        base_domain = self._get_base_domain()
+        records = self.search(base_domain)
+        return getattr(records, rule.method)()
+
 
 class BaseExceptionModel(models.AbstractModel):
     _inherit = "base.exception.method"
@@ -201,6 +223,13 @@ class BaseExceptionModel(models.AbstractModel):
     ignore_exception = fields.Boolean("Ignore Exceptions", copy=False)
 
     def action_ignore_exceptions(self):
+        if any(self.exception_ids.mapped("is_blocking")):
+            raise UserError(
+                _(
+                    "The exceptions can not be ignored, because "
+                    "some of them are blocking."
+                )
+            )
         self.write({"ignore_exception": True})
         return True
 
@@ -218,8 +247,17 @@ class BaseExceptionModel(models.AbstractModel):
             if rec.exception_ids and not rec.ignore_exception:
                 rec.exceptions_summary = "<ul>%s</ul>" % "".join(
                     [
-                        "<li>%s: <i>%s</i></li>"
-                        % tuple(map(html.escape, (e.name, e.description or "")))
+                        "<li>%s: <i>%s</i> <b>%s<b></li>"
+                        % tuple(
+                            map(
+                                html.escape,
+                                (
+                                    e.name,
+                                    e.description or "",
+                                    _("(Blocking exception)") if e.is_blocking else "",
+                                ),
+                            )
+                        )
                         for e in rec.exception_ids
                     ]
                 )
@@ -244,17 +282,28 @@ class BaseExceptionModel(models.AbstractModel):
         return self.env.ref("base_exception.action_exception_rule_confirm")
 
     def _check_exception(self):
-        """
+        """Check exceptions
+
         This method must be used in a constraint that must be created in the
         object that inherits for base.exception.
-        for sale :
-        @api.constrains('ignore_exception',)
-        def sale_check_exception(self):
-            ...
-            ...
-            self._check_exception
+
+        .. code-block:: python
+
+            @api.constrains("ignore_exception")
+            def sale_check_exception(self):
+                # ...
+                self._check_exception()
+
+        For convenience, this check can be skipped by setting check_exception=False
+        in context.
+
+        Exceptions will be raised as ValidationError, but this can be disabled
+        by setting raise_exception=False in context. They will still be detected
+        and updated on the related record, though.
         """
+        if not self.env.context.get("check_exception", True):  # pragma: no cover
+            return True
         exception_ids = self.detect_exceptions()
-        if exception_ids:
+        if exception_ids and self.env.context.get("raise_exception", True):
             exceptions = self.env["exception.rule"].browse(exception_ids)
             raise ValidationError("\n".join(exceptions.mapped("name")))

@@ -13,6 +13,5 @@
     "category": "Tools",
     "depends": ["web"],
     "auto_install": False,
-    "post_load": "post_load",
     "installable": True,
 }
