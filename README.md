@@ -21,6 +21,8 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
+[attachment_queue](attachment_queue/) | 14.0.1.0.1 | [![florian-dacosta](https://github.com/florian-dacosta.png?size=30px)](https://github.com/florian-dacosta) [![sebastienbeau](https://github.com/sebastienbeau.png?size=30px)](https://github.com/sebastienbeau) | Base module adding the concept of queue for processing files
+[attachment_synchronize](attachment_synchronize/) | 14.0.1.0.1 | [![florian-dacosta](https://github.com/florian-dacosta.png?size=30px)](https://github.com/florian-dacosta) [![sebastienbeau](https://github.com/sebastienbeau.png?size=30px)](https://github.com/sebastienbeau) [![GSLabIt](https://github.com/GSLabIt.png?size=30px)](https://github.com/GSLabIt) [![bealdav](https://github.com/bealdav.png?size=30px)](https://github.com/bealdav) | Attachment Synchronize
 [attachment_unindex_content](attachment_unindex_content/) | 14.0.1.0.0 | [![moylop260](https://github.com/moylop260.png?size=30px)](https://github.com/moylop260) [![ebirbe](https://github.com/ebirbe.png?size=30px)](https://github.com/ebirbe) | Disable indexing of attachments
 [auditlog](auditlog/) | 14.0.1.2.0 |  | Audit Log
 [auto_backup](auto_backup/) | 14.0.1.0.0 |  | Backups database
@@ -29,7 +31,8 @@ addon | version | maintainers | summary
 [base_cron_exclusion](base_cron_exclusion/) | 14.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | Allow you to select scheduled actions that should not run simultaneously.
 [base_custom_info](base_custom_info/) | 14.0.1.0.1 |  | Add custom field in models
 [base_exception](base_exception/) | 14.0.2.0.0 | [![hparfr](https://github.com/hparfr.png?size=30px)](https://github.com/hparfr) [![sebastienbeau](https://github.com/sebastienbeau.png?size=30px)](https://github.com/sebastienbeau) | This module provide an abstract model to manage customizable exceptions to be applied on different models (sale order, invoice, ...)
-[base_jsonify](base_jsonify/) | 14.0.1.5.0 |  | Base module that provide the jsonify method on all models
+[base_generate_code](base_generate_code/) | 14.0.1.0.1 | [![Kev-Roche](https://github.com/Kev-Roche.png?size=30px)](https://github.com/Kev-Roche) | Code Generator
+[base_jsonify](base_jsonify/) | 14.0.2.0.0 |  | Base module that provide the jsonify method on all models. WARNING: since version 14.0.2.0.0 the module have been renamed to `jsonifier`. This module now depends on it only for backward compatibility. It will be discarded in v15 likely.
 [base_kanban_stage](base_kanban_stage/) | 14.0.1.0.0 |  | Provides stage model and abstract logic for inheritance
 [base_kanban_stage_state](base_kanban_stage_state/) | 14.0.1.0.0 |  | Maps stages from base_kanban_stage to states
 [base_m2m_custom_field](base_m2m_custom_field/) | 14.0.1.1.0 |  | Customizations of Many2many
@@ -45,7 +48,7 @@ addon | version | maintainers | summary
 [base_technical_user](base_technical_user/) | 14.0.1.0.0 |  | Add a technical user parameter on the company
 [base_time_window](base_time_window/) | 14.0.1.0.1 |  | Base model to handle time windows
 [base_video_link](base_video_link/) | 14.0.1.1.1 |  | Add the possibility to link video on record
-[base_view_inheritance_extension](base_view_inheritance_extension/) | 14.0.1.1.0 |  | Adds more operators for view inheritance
+[base_view_inheritance_extension](base_view_inheritance_extension/) | 14.0.1.1.1 |  | Adds more operators for view inheritance
 [bus_alt_connection](bus_alt_connection/) | 14.0.1.0.0 |  | Needed when using PgBouncer as a connection pooler
 [configuration_helper](configuration_helper/) | 14.0.1.0.0 |  | Configuration Helper
 [datetime_formatter](datetime_formatter/) | 14.0.1.0.0 |  | Helper functions to give correct format to date[time] fields
@@ -58,6 +61,7 @@ addon | version | maintainers | summary
 [html_image_url_extractor](html_image_url_extractor/) | 14.0.1.0.0 |  | Extract images found in any HTML field
 [html_text](html_text/) | 14.0.1.0.0 |  | Generate excerpts from any HTML field
 [iap_alternative_provider](iap_alternative_provider/) | 14.0.1.0.0 | [![sebastienbeau](https://github.com/sebastienbeau.png?size=30px)](https://github.com/sebastienbeau) | Base module for providing alternative provider for iap apps
+[jsonifier](jsonifier/) | 14.0.1.0.1 |  | JSON-ify data for all models
 [letsencrypt](letsencrypt/) | 14.0.1.0.0 |  | Request SSL certificates from letsencrypt.org
 [module_auto_update](module_auto_update/) | 14.0.1.0.1 |  | Automatically update Odoo modules
 [module_change_auto_install](module_change_auto_install/) | 14.0.1.0.3 | [![legalsylvain](https://github.com/legalsylvain.png?size=30px)](https://github.com/legalsylvain) | Customize auto installables modules by configuration
@@ -71,7 +75,7 @@ addon | version | maintainers | summary
 [sql_export](sql_export/) | 14.0.1.2.0 |  | Export data in csv file with SQL requests
 [sql_export_excel](sql_export_excel/) | 14.0.1.1.0 |  | Allow to export a sql query to an excel file.
 [sql_export_mail](sql_export_mail/) | 14.0.1.0.0 |  | Send csv file generated by sql query by mail.
-[sql_request_abstract](sql_request_abstract/) | 14.0.1.2.0 | [![legalsylvain](https://github.com/legalsylvain.png?size=30px)](https://github.com/legalsylvain) | Abstract Model to manage SQL Requests
+[sql_request_abstract](sql_request_abstract/) | 14.0.1.3.0 | [![legalsylvain](https://github.com/legalsylvain.png?size=30px)](https://github.com/legalsylvain) | Abstract Model to manage SQL Requests
 [test_base_time_window](test_base_time_window/) | 14.0.1.0.1 |  | Test Base model to handle time windows
 [upgrade_analysis](upgrade_analysis/) | 14.0.2.2.0 |  | Performs a difference analysis between modules installed on two different Odoo instances
 
